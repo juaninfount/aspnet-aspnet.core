@@ -1,0 +1,75 @@
+﻿<div id="body">
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>Welcome to ASP.NET Web API!</h1>
+                <h2>Modify the code in this template to jump-start your ASP.NET Web API development.</h2>
+            </hgroup>
+            <p>
+                ASP.NET Web API allows you to expose your applications, data and services to the
+                web directly over HTTP.
+            </p>
+            <p>
+                To learn more about ASP.NET Web API visit the
+                <a href="http://go.microsoft.com/fwlink/?LinkID=238195" title="ASP.NET Web API Website">ASP.NET Web API Website</a>.
+                The page features <mark>videos, tutorials, and samples</mark> to help you get the most from ASP.NET Web API.
+                If you have any questions about ASP.NET Web API, visit
+                <a href="http://go.microsoft.com/fwlink/?LinkID=238196" title="ASP.NET Web API Forum">our forums</a>.
+            </p>
+        </div>
+    </section>
+    @section scripts{
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#search').click(function () {
+                    $('#employees').empty(); $('#employee').empty();
+                    $.getJSON("/api/employees", function (data) {
+                        $.each(data, function (i, employee) {
+                            var now = new Date();
+                            var time = now.getHours() + ':' + now.getMinutes() + ':' + now.getHours();
+
+                            var content = employee.Id + ' ' + employee.Name;
+                            content = content + ' ' + employee.Department + ' ts';
+                            $('#employees').append($('<li/>', { text: content }));
+                        });
+                    });
+                });
+
+                $('#details').click(function () {
+                    $('#employees').empty(); $('#employee').empty();
+                    $.getJSON("http://localhost:6504/api/employees/12345", function (employee) {
+                       
+                            console.log('employee:     ' + employee);
+                            //console.log('employee: ' + employee);
+
+                            var now = new Date();
+                            var time = now.getHours() + ':' + now.getMinutes() + ':' + now.getHours();
+
+                            var content = employee.Id + ' ' + employee.Name;
+                            content = content + ' ' + employee.Department;
+                            $('#employee').append($('<li/>', { text: content }));
+                        
+                    });
+                });
+            });
+        </script>
+    }
+    <section class="content-wrapper main-content clear-fix">
+        <h3>We suggest the following steps:</h3>
+        <div>
+            <div>
+                <h1>
+                    Employees Listing
+                </h1>
+                <input id="search" type="button" value="Get" />
+                <input id="details" type="button" value="Details" />
+            </div>
+            <div>
+                <ul id="employees" />
+            </div>
+            <div>
+                <ul id="employee" />
+            </div>
+        </div>
+    </section>
+</div>

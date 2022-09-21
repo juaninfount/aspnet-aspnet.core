@@ -1,0 +1,1 @@
+﻿Party Invites - dotnetcore sample

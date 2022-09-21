@@ -1,0 +1,41 @@
+@model  PartyInvites.Models.GuestResponse
+@{
+  Layout = "_Layout";
+}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />    
+  </head>
+  <body>
+    <h5 class="text-white m-2 p-2">RSVP</h5>
+    <div asp-validation-summary="All"  ></div>
+    <form asp-action="RsvpForm" method="post" class="m-2 p-2" >      
+      <div class="form-group">        
+        <label asp-for="Name">Your name:</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="field-validation-error"></span>  
+      </div>
+      <div class="form-group">
+        <label asp-for="Email">Your email:</label>
+        <input asp-for="Email" class="form-control"/>
+        <span asp-validation-for="Email" class="field-validation-error"></span>  
+      </div>
+      <div class="form-group">
+        <label asp-for="Phone">Your phone:</label>
+        <input asp-for="Phone" class="form-control"/>
+        <span asp-validation-for="Phone" class="field-validation-error"></span>  
+      </div>
+      <div class="form-group">
+        <label>Will you attend?</label>
+        <span asp-validation-for="WillAttend" class="field-validation-error"></span>  
+        <select asp-for="WillAttend" class="form-control">
+          <option value="">Choose an option</option>
+          <option value="true">Yes, I'll be there</option>
+          <option value="false">No, I can't come</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" >Submit RSVP</button>
+    </form>
+  </body>
+</html>

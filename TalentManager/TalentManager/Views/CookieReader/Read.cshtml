@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Cookie Reader";
+}
+
+<h2>Cookie-Reader</h2>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#details').click(function () {
+                $('#employee').empty();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/employees/12345",
+                    //url: "http://localhost:6504/api/employees/12345",
+                    success: function (response) {
+                        alert(document.cookie); // cookie from localhost:6504
+                        $('#employee').append($('<li/>', { text: response.Id + ' ' + response.Name }));
+                    }
+                });
+            });
+        });
+    </script>
+}
+<div>
+    <div>
+        <input id="details"  type="button" value="Details" />
+    </div>
+    <div>
+        <ul id="employee" />
+    </div>
+</div>
