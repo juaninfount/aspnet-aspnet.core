@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿//using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Core.Dtos;
 using SocialMedia.Core.Entities;
-using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.Configuration;
 using SocialMedia.Core.QueryFilters;
 using SocialMedia.Core.CustomEntities;
 using SocialMedia.Infraestructure.Interfaces;
@@ -112,21 +112,18 @@ namespace SocialMedia.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id,[FromBody] PublicacionDto publicacionDto)
-        {
-            bool returnValue = false;
+        public async Task Update(int id,[FromBody] PublicacionDto publicacionDto)
+        {            
             Publicacion publicacion = null;
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    BadRequest(ModelState);
                 }
 
                 publicacion = this._Mapper.Map<Publicacion>(publicacionDto);
-                returnValue = await this._PostService.Update(id, publicacion);               
-                var response = new Responses.ApiResponse<bool>(returnValue);
-                return Ok(response);                
+                await this._PostService.Update(id, publicacion);                
             }
             catch (Exception)
             {
@@ -135,24 +132,16 @@ namespace SocialMedia.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id) 
+        public async Task Delete(int id) 
         {
-            bool returnValue = false;
             try
             {
-                returnValue = await this._PostService.Delete(id);            
-                if (!returnValue){
-                    return BadRequest();
-                } 
-
-                var response = new Responses.ApiResponse<bool>(returnValue);
-                return Ok(response);
+                await this._PostService.Delete(id);
             }
             catch (Exception)
             {
                 throw;
             }           
         }
-
     }
 }

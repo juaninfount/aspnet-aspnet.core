@@ -1,14 +1,15 @@
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Core.Dtos;
-using SocialMedia.Core.Enumerations;
+//using SocialMedia.Core.Enumerations;
 using SocialMedia.Infraestructure.Interfaces;
-using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using System.Threading.Tasks;
 using SocialMedia.API.Responses;
+using SocialMedia.Core.Enumerations;
 
 namespace SocialMedia.API.Controllers
 {

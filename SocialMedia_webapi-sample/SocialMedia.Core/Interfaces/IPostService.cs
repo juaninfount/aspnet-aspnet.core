@@ -13,9 +13,9 @@ namespace SocialMedia.Core.Interfaces
 
         Task<Publicacion> GetPost(int id);
 
-        Task<bool> Update(int id, Publicacion publicacion);
+        Task Update(int id, Publicacion publicacion);
 
-        Task<bool> Delete(int id);
+        Task Delete(int id);
 
     } 
 

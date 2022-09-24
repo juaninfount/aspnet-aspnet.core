@@ -64,11 +64,11 @@ namespace SocialMedia.Core.Services
                 throw;
             }
         }
-        
+                
         public async Task<IEnumerable<Publicacion>> GetPosts(PostQueryFilter filters)
         {
             var posts = await this._UnitOfWork.PostRepository.GetAll(filters);
-            if(posts != null && posts.Count > 0 && filters != null)
+            if(posts != null && posts.Count() > 0 && filters != null)
             {            
                 filters.PageNumber = filters.PageNumber <= 0 ? 1 : filters.PageNumber;
                 filters.PageSize = filters.PageSize <= 0 ? 10 : filters.PageSize;
@@ -89,11 +89,11 @@ namespace SocialMedia.Core.Services
             }                     
         }
                       
-        public async Task<bool> Update(int id, Publicacion publicacion)
+        public async Task Update(int id, Publicacion publicacion)
         {                     
             try
-            {                                               
-                return  await this._UnitOfWork.PostRepository.Update(id, publicacion);
+            {
+                await this._UnitOfWork.PostRepository.Update(id, publicacion);
             }
             catch (Exception)
             {
@@ -101,16 +101,16 @@ namespace SocialMedia.Core.Services
             }
         }
         
-        public async Task<bool> Delete(int id)
+        public async Task Delete(int id)
         {            
             try
-            {                
-                return await this._UnitOfWork.PostRepository.Delete(id);
+            {        
+                await this._UnitOfWork.PostRepository.Delete(id);
             }
             catch (System.Exception)
-            {                
+            {
                 throw;
             }
-        }
+        }       
     }
 }

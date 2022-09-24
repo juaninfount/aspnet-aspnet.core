@@ -8,17 +8,16 @@ namespace SocialMedia.Core.Interfaces
     public interface IPostRepository
     {
         
-        Task<IList<Publicacion>> GetAll(PostQueryFilter filters);
+        Task<IEnumerable<Publicacion>> GetAll(PostQueryFilter filters);
 
         Task<Publicacion> GetById(int id);
 
         Task<int> Insert(Publicacion publicacion);
 
-        Task<bool> Update(int id, Publicacion publicacion);
+        Task Update(int id, Publicacion publicacion);
 
-        Task<bool> Delete(int id);        
+        Task Delete(int id);        
 
-        Task<IEnumerable<Publicacion>>  GetPostsByUser(int id);
-        
+        Task<IEnumerable<Publicacion>>  GetPostsByUser(int id);        
     }
 }

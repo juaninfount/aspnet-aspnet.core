@@ -3,25 +3,26 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+//using Microsoft.OpenApi.Models;
 using System;
-using SocialMedia.Core.Services;
-using SocialMedia.Core.Interfaces;
-using SocialMedia.Core.CustomEntities;
-using SocialMedia.Infraestructure.Options;
-using SocialMedia.Infraestructure.Services;
-using SocialMedia.Infraestructure.Repositories;
+// using SocialMedia.Core.Services;
+// using SocialMedia.Core.Interfaces;
+// using SocialMedia.Core.CustomEntities;
+// using SocialMedia.Infraestructure.Options;
+// using SocialMedia.Infraestructure.Services;
+// using SocialMedia.Infraestructure.Repositories;
 using SocialMedia.Infraestructure.Filters;
-using SocialMedia.Infraestructure.Interfaces;
+//using SocialMedia.Infraestructure.Interfaces;
 using SocialMedia.Infraestructure.Extensions;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Http;
-using System.Reflection;
+// using Microsoft.AspNetCore.Http;
+// using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using SocialMedia.Core.CustomEntities;
+using Microsoft.AspNetCore.Identity;
 
 namespace SocialMedia.API
-{
-    
+{    
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -45,12 +46,14 @@ namespace SocialMedia.API
                 options.SerializerSettings.NullValueHandling     = Newtonsoft.Json.NullValueHandling.Ignore;
             }).ConfigureApiBehaviorOptions(options => 
             {
-                options.SuppressModelStateInvalidFilter = true;
+                //options.SuppressModelStateInvalidFilter = true;
             });
-            
+
             //////////////////////////////////////////////////////////////////////////////////////
             // revisar ==> \SocialMedia.Infraestructure\Extensions\ServiceCollectionExtension.cs
-                        
+            services.AddOptions(Configuration);
+            services.AddDatabases(Configuration);
+            services.AddServices(Configuration);
             services.AddSwagger();
             /*
             services.AddSwaggerGen(c =>
@@ -61,17 +64,17 @@ namespace SocialMedia.API
             
             //////////////////////////////////////////////////////////////////////////////////////
             // revisar ==> \SocialMedia.Infraestructure\Extensions\ServiceCollectionExtension.cs
-            services.AddOptions();
-            /*
+            
+            
             // configuraciones de paginacion - optionsValue pattern
-            services.Configure<PaginationOptions>(Configuration.GetSection("Pagination"));
+            //services.Configure<PaginationOptions>(Configuration.GetSection("Pagination"));
             // configuraciones de passworh y valores hash
-            services.Configure<PasswordOptions>(Configuration.GetSection("PasswordOptions"));
-            */
+            //services.Configure<PasswordOptions>(Configuration.GetSection("PasswordOptions"));
+            
             //////////////////////////////////////////////////////////////////////////////////////
             // revisar ==> \SocialMedia.Infraestructure\Extensions\ServiceCollectionExtension.cs
 
-            services.AddDatabases(Configuration);
+            
             // cadena de conexion por defecto
             /*
             services.AddTransient<ISocialMediaRepository>(options => 
@@ -79,9 +82,7 @@ namespace SocialMedia.API
             */
             //////////////////////////////////////////////////////////////////////////////////////
             // revisar ==> \SocialMedia.Infraestructure\Extensions\ServiceCollectionExtension.cs
-            
-            services.AddServices();
-
+                        
             /*
             // inyeccion de dependencias IService
             services.AddTransient<IPostService, PostService>();
@@ -99,6 +100,7 @@ namespace SocialMedia.API
             */
             //////////////////////////////////////////////////////////////////////////////////////
 
+            
             services.AddMvc(options => 
             { 
                 options.Filters.Add<ValidationFilter>();

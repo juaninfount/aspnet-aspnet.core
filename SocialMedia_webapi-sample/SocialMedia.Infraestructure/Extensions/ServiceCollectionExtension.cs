@@ -8,6 +8,10 @@ using SocialMedia.Core.Services;
 using Microsoft.OpenApi.Models;
 using SocialMedia.Infraestructure.Interfaces;
 using SocialMedia.Infraestructure.Services;
+using SocialMedia.Infraestructure.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FluentValidation.AspNetCore;
+using System;
 
 namespace SocialMedia.Infraestructure.Extensions
 {
@@ -30,11 +34,14 @@ namespace SocialMedia.Infraestructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ISecurityService, SecurityService>();
-            //services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddSingleton<IDapperContext, DapperContext>();            
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<IPasswordService, PasswordHasherService>();
             services.AddSingleton<IUriService>(provider =>
@@ -43,8 +50,7 @@ namespace SocialMedia.Infraestructure.Extensions
                 var request = accesor.HttpContext.Request;
                 var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
                 return new UriService(absoluteUri);
-            });
-
+            });          
             return services;
         }
 

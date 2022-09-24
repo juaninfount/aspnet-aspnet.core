@@ -9,13 +9,16 @@ namespace SocialMedia.Infraestructure.Repositories
 
         private readonly ISocialMediaRepository _SocialMediaRepository = null;
         private readonly ISecurityRepository _SecurityRepository = null;
+        private readonly IDapperContext _dapperContext = null;
 
-        public UnitOfWork(ISocialMediaRepository ISocialMediaRepository)
+        public UnitOfWork(ISocialMediaRepository ISocialMediaRepository, IDapperContext dapperContext)
         {
             _SocialMediaRepository = ISocialMediaRepository;
+            _dapperContext = dapperContext;
         }
 
-        public IPostRepository      PostRepository => _PostRepository ?? new PostRepository(_SocialMediaRepository);
+        //public IPostRepository      PostRepository => _PostRepository ?? new PostRepository(_SocialMediaRepository);
+        public IPostRepository PostRepository => _PostRepository ?? new PostRepository(_dapperContext);
 
         public IUserRepository     UserRepository => _UserRepository ?? new UserRepository(_SocialMediaRepository);
         public ISecurityRepository SecurityRepository => _SecurityRepository ?? new SecurityRepository(_SocialMediaRepository);

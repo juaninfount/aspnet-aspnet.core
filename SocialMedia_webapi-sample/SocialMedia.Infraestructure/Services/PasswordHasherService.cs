@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
 using SocialMedia.Infraestructure.Interfaces;
 using SocialMedia.Infraestructure.Options;
-using  System.Security.Cryptography;
+using System.Security.Cryptography;
 using System;
 using System.Linq;
 
