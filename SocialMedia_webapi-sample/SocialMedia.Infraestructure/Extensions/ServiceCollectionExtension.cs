@@ -8,23 +8,19 @@ using SocialMedia.Core.Services;
 using Microsoft.OpenApi.Models;
 using SocialMedia.Infraestructure.Interfaces;
 using SocialMedia.Infraestructure.Services;
-using SocialMedia.Infraestructure.Filters;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using FluentValidation.AspNetCore;
-using System;
 
 namespace SocialMedia.Infraestructure.Extensions
 {
 
     public static class ServiceCollectionExtension
     {
-        
+        /*
         public static void AddDatabases(this IServiceCollection services, 
                                         IConfiguration configuration)
         {
             services.AddTransient<ISocialMediaRepository>(options => 
                                 new SocialMediaRepository(configuration.GetConnectionString("DefaultConnection")));
-        }
+        }*/
 
          public static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
         {

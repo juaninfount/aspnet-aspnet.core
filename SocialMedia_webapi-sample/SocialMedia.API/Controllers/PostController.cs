@@ -1,5 +1,4 @@
-﻿//using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Core.Dtos;
 using SocialMedia.Core.Entities;
-//using Microsoft.Extensions.Configuration;
 using SocialMedia.Core.QueryFilters;
 using SocialMedia.Core.CustomEntities;
 using SocialMedia.Infraestructure.Interfaces;

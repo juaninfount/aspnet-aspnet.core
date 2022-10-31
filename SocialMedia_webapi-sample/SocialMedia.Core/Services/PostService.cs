@@ -16,7 +16,7 @@ namespace SocialMedia.Core.Services
         private readonly IUnitOfWork _UnitOfWork = null;
         private readonly PaginationOptions _PaginationOptions = null;
         
-        public PostService( IUnitOfWork UnitOfWork, IOptions<PaginationOptions> options)
+        public PostService(IUnitOfWork UnitOfWork, IOptions<PaginationOptions> options)
         {
             _UnitOfWork = UnitOfWork;
             _PaginationOptions = options.Value;

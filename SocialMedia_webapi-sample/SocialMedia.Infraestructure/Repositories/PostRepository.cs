@@ -4,7 +4,6 @@ using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Core.QueryFilters;
 using System.Threading.Tasks;
-//using System.Data.SqlClient;
 using System.Data;
 using Dapper;
 
@@ -12,13 +11,13 @@ namespace SocialMedia.Infraestructure.Repositories
 {
     public class PostRepository: IPostRepository
     {
-        ISocialMediaRepository _databaseRepository = null;
+        //ISocialMediaRepository _databaseRepository = null;
         IDapperContext _IDapperContext = null;
 
-        public PostRepository(ISocialMediaRepository databaseRepository)
-        {
-            _databaseRepository = databaseRepository;                                
-        }
+        // public PostRepository(ISocialMediaRepository databaseRepository)
+        // {
+        //     _databaseRepository = databaseRepository;                                
+        // }
 
         public PostRepository(IDapperContext IDapperContext)
         {

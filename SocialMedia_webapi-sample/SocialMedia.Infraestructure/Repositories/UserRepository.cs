@@ -1,19 +1,24 @@
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using System;
+using Dapper;
 
 public class UserRepository : IUserRepository
 {
     ISocialMediaRepository _databaseRepository = null;
+    IDapperContext _IDapperContext = null;
 
     public UserRepository(ISocialMediaRepository databaseRepository)
     {
         _databaseRepository = databaseRepository;            
+    }
+
+    public UserRepository(IDapperContext IDapperContext)
+    {
+        _IDapperContext = IDapperContext;
     }
 
     public Task<bool> Delete(int id)
@@ -21,9 +26,10 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
   
+    /*
     public async Task<Usuario> GetById(int id)
     {
-         List<SqlParameter> parameters = null;
+        List<SqlParameter> parameters = null;
         SqlDataReader dataReader = null;
         SocialMedia.Core.Entities.Usuario  usuario = null;
 
@@ -57,7 +63,8 @@ public class UserRepository : IUserRepository
            
             return usuario;
         }
-        catch (System.Exception)
+        catch (Sy
+        stem.Exception)
         {            
             throw;
         }
@@ -70,9 +77,35 @@ public class UserRepository : IUserRepository
                 dataReader.Dispose();
             }
              dataReader = null;                        
-        }      
+        }
     }
-        
+    */
+    
+    /// <summary>
+    /// Version query para Dapper
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<Usuario> GetById(int id)
+    {
+        String query = @"select top 1 IdUsuario,Nombres,Apellidos,Email,FechaNacimiento,Telefono,Activo
+                        from Usuario where IdUsuario = @id ";
+        SocialMedia.Core.Entities.Usuario usuario = null;
+        try
+        {
+            using(var connection = _IDapperContext.CreateConnection())
+            {
+                usuario = await connection.QuerySingleOrDefaultAsync<Usuario>(query, new { id });                
+            }
+            return usuario;
+        }
+        catch(Exception)
+        {
+            throw;
+        }  
+    }
+
+    /*
     public async Task<IEnumerable<Usuario>> GetAll()
     {        
         SqlDataReader dataReader = null;
@@ -113,71 +146,117 @@ public class UserRepository : IUserRepository
              dataReader = null;                        
         }
     }
+    */
+    
+    public async Task<IEnumerable<Usuario>> GetAll()
+    {
+        IEnumerable<Usuario> usuarios = new List<Usuario>();
+        var query = @"select IdUsuario,Nombres,Apellidos,Email,FechaNacimiento,Telefono,Activo
+                      from Usuario";
+        try
+        {
+            using (var connection = _IDapperContext.CreateConnection())
+            {
+                usuarios = await connection.QueryAsync<Usuario>(query);
+                return usuarios;
+            }
+        }
+        catch(Exception)
+        {
+            throw;
+        }
+    }
+
+    /*
+    public async Task<int> Insert(Usuario usuario)
+    {
+        List<SqlParameter> parameters = null;
+        int returnValue;
+
+        try
+        {
+            parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter()
+            {
+                ParameterName = "@Nombres",
+                SqlDbType = SqlDbType.VarChar,
+                Direction = ParameterDirection.Input,
+                Value = usuario.Nombres
+            });
+
+            parameters.Add(new SqlParameter()
+            {
+                ParameterName = "@Apellidos",
+                SqlDbType = SqlDbType.VarChar,
+                Direction = ParameterDirection.Input,
+                Value = usuario.Apellidos
+            });
+
+            parameters.Add(new SqlParameter()
+            {
+                ParameterName = "@Email",
+                SqlDbType = SqlDbType.VarChar,
+                Direction = ParameterDirection.Input,
+                Value = usuario.Email
+            });
+
+            parameters.Add(new SqlParameter()
+            {
+                ParameterName = "@FechaNacimiento",
+                SqlDbType = SqlDbType.DateTime,
+                Direction = ParameterDirection.Input,
+                Value = usuario.FechaNacimiento
+            });
+
+            returnValue = await _databaseRepository.Insert("INSERT INTO [dbo].[Usuario] " +
+                                                            " ([Nombres],[Apellidos],[Email],[FechaNacimiento]) VALUES " +
+                                                            " (@Nombres,@Apellidos,@Email,@FechaNacimiento)", 
+                                                            parameters, CommandType.Text);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+
+        return returnValue;
+    }
+    */
 
     public async Task<int> Insert(Usuario usuario)
     {
-          List<SqlParameter> parameters = null;
-            int returnValue;
+        int id;
+        try
+        {
+            var query = "INSERT INTO [dbo].[Usuario] " +
+                        " ([Nombres],[Apellidos],[Email],[FechaNacimiento]) VALUES " +
+                        " (@Nombres,@Apellidos,@Email,@FechaNacimiento)";
 
-            try
+            var parameters = new DynamicParameters();
+            parameters.Add("Nombres", usuario.IdUsuario, DbType.String);
+            parameters.Add("Apellidos", usuario.Apellidos, DbType.String);
+            parameters.Add("Email", usuario.Email, DbType.String);
+            parameters.Add("FechaNacimiento", usuario.FechaNacimiento, DbType.DateTime);  
+            using(var connection = _IDapperContext.CreateConnection())
             {
-                parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter()
-                {
-                    ParameterName = "@Nombres",
-                    SqlDbType = SqlDbType.VarChar,
-                    Direction = ParameterDirection.Input,
-                    Value = usuario.Nombres
-                });
-
-                parameters.Add(new SqlParameter()
-                {
-                    ParameterName = "@Apellidos",
-                    SqlDbType = SqlDbType.VarChar,
-                    Direction = ParameterDirection.Input,
-                    Value = usuario.Apellidos
-                });
-
-                parameters.Add(new SqlParameter()
-                {
-                    ParameterName = "@Email",
-                    SqlDbType = SqlDbType.VarChar,
-                    Direction = ParameterDirection.Input,
-                    Value = usuario.Email
-                });
-
-                parameters.Add(new SqlParameter()
-                {
-                    ParameterName = "@FechaNacimiento",
-                    SqlDbType = SqlDbType.DateTime,
-                    Direction = ParameterDirection.Input,
-                    Value = usuario.FechaNacimiento
-                });
-
-                returnValue = await _databaseRepository.Insert("INSERT INTO [dbo].[Usuario] " +
-                                                                " ([Nombres],[Apellidos],[Email],[FechaNacimiento]) VALUES " +
-                                                                " (@Nombres,@Apellidos,@Email,@FechaNacimiento)", 
-                                                                parameters, CommandType.Text);
+                id = await connection.QuerySingleAsync<int>(query, parameters);                    
             }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return returnValue;
+        }
+        catch(Exception)
+        {
+            throw;
+        }
+        return id;
     }
 
+    /*
     public async Task<bool> Update(int id, Usuario usuario)
     {
-         List<SqlParameter> parameters = null;
-            int count = 0;
+        List<SqlParameter> parameters = null;
+        int count = 0;
 
-            try
-            {
-                parameters = new List<SqlParameter>();
-                
-                parameters.Clear();
-                parameters = new List<SqlParameter>
+        try
+        {
+                parameters = new List<SqlParameter>()
                 {
                     new SqlParameter()
                     {
@@ -244,5 +323,38 @@ public class UserRepository : IUserRepository
             {
                 throw;
             }
+    }
+    */
+
+    public async Task<bool> Update(int id, Usuario usuario)
+    {
+        var query = @"UPDATE [dbo].[Usuario]
+                    SET  [Nombres]         = @Nombres
+                        ,[Apellidos]       = @Apellidos
+                        ,[Email]           = @Email
+                        ,[FechaNacimiento] = @FechaNacimiento
+                        ,[Telefono]        = @Telefono
+                        ,[Activo]          = @Activo
+                    WHERE IdUsuario=@IdUsuario";
+        try
+        {   
+            var parameters = new DynamicParameters();
+            parameters.Add("IdUsuario", id, DbType.Int32);
+            parameters.Add("Nombres", usuario.Nombres, DbType.String);
+            parameters.Add("Apellidos", usuario.Apellidos, DbType.String);
+            parameters.Add("Email", usuario.Email, DbType.String);
+            parameters.Add("FechaNacimiento", usuario.FechaNacimiento, DbType.DateTime);
+            parameters.Add("Telefono", usuario.Telefono, DbType.String);
+            parameters.Add("Activo", usuario.Activo, DbType.Boolean);
+            using (var connection = _IDapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(query, parameters);
+            }
+        return true;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }
