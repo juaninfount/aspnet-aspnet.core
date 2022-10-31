@@ -6,20 +6,28 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Text;
 using System.Collections.Generic;
-using System;
+using Dapper;
 
 namespace SocialMedia.Infraestructure.Repositories
 {
     public class SecurityRepository: ISecurityRepository
     {
-        ISocialMediaRepository _databaseRepository = null;
+        //ISocialMediaRepository _databaseRepository = null;
+         IDapperContext _IDapperContext = null;
 
+        /*
         public SecurityRepository(ISocialMediaRepository databaseRepository)
         {
             _databaseRepository = databaseRepository;
+        }*/
+
+        public SecurityRepository(IDapperContext IDapperContext)
+        {
+            _IDapperContext = IDapperContext;
         }
-                
-        public Security GetLoginByCredentials(UserLogin login)
+
+        /*
+        public  Security GetLoginByCredentials(UserLogin login)
         {
             string sql = "";
            
@@ -56,6 +64,8 @@ namespace SocialMedia.Infraestructure.Repositories
                     }
                                                                                                                                
                 }
+
+              
             }
 
             return objSecurity;
@@ -65,7 +75,34 @@ namespace SocialMedia.Infraestructure.Repositories
                 throw;
             }
         }
+        */
+
+
+        public async Task<Security> GetLoginByCredentials(UserLogin login)
+        {
+            var query = "";
+            Security objSecurity;
+            try
+            {
+                query = string.Format(" select top 1 s.[SecurityID],s.[User],s.[UserName],s.[Password],( " +
+                                " CASE s.Role WHEN 'admin' THEN " +  (int)Roletype.Administrator + " WHEN 'operator' THEN "+ (int)Roletype.Operator + " END " +
+                                " ) " +
+                                " from dbo.[Security] s where s.[User] = '{0}' ", 
+                                 login.User);
+
+                using (var connection = _IDapperContext.CreateConnection())
+                {
+                    objSecurity = await connection.QuerySingleOrDefaultAsync<Security>(query);
+                }
+                return objSecurity;
+            }
+            catch (System.Exception)
+            {                
+                throw;
+            }
+        }
         
+        /*
         public async Task<int>  RegisterUser(Security security)
         {
             StringBuilder str = null;
@@ -94,7 +131,37 @@ namespace SocialMedia.Infraestructure.Repositories
             {                
                 throw;
             } 
+        }
+        */
 
+        public async Task<int>  RegisterUser(Security security)
+        {
+            StringBuilder str = null;
+            int id = 0;
+            try
+            {
+                str = new StringBuilder();
+                str.AppendFormat(@"INSERT INTO [dbo].[Security]
+                                    ([User]
+                                    ,[UserName]
+                                    ,[Password]
+                                    ,[Role])
+                                    VALUES
+                                    ('{0}',
+                                    '{1}',
+                                    '{2}',
+                                    '{3}')", security.User, security.UserName, security.Password, security.Role);
+
+                using(var connection = _IDapperContext.CreateConnection())
+                {
+                    id = await connection.QuerySingleAsync<int>(str.ToString());                    
+                }
+                return id;
+            }
+            catch (System.Exception)
+            {                
+                throw;
+            } 
         }
     }
 }

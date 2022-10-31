@@ -15,7 +15,7 @@ namespace SocialMedia.Core.Services
             _UnitOfWork = UnitOfWork;
         }
 
-        public Security GetLoginByCredentials(UserLogin login)
+        public Task<Security> GetLoginByCredentials(UserLogin login)
         {
            return _UnitOfWork.SecurityRepository.GetLoginByCredentials(login);
         }

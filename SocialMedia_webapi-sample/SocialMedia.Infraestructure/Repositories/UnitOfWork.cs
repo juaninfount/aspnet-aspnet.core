@@ -22,10 +22,12 @@ namespace SocialMedia.Infraestructure.Repositories
             _dapperContext = dapperContext;
         } */
 
+       
         //public IPostRepository      PostRepository => _PostRepository ?? new PostRepository(_SocialMediaRepository);
         public IPostRepository PostRepository => _PostRepository ?? new PostRepository(_dapperContext);
         //public IUserRepository     UserRepository => _UserRepository ?? new UserRepository(_SocialMediaRepository);
         public IUserRepository     UserRepository => _UserRepository ?? new UserRepository(_dapperContext);
+        
         //public ISecurityRepository SecurityRepository => _SecurityRepository ?? new SecurityRepository(_SocialMediaRepository);
         public ISecurityRepository SecurityRepository => _SecurityRepository ?? new SecurityRepository(_dapperContext);
 
