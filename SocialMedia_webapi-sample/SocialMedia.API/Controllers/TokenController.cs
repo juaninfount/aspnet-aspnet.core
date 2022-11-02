@@ -42,6 +42,7 @@ namespace SocialMedia.API.Controllers
         private (bool, Security) IsValidUser(UserLogin login)
         {
             var user =_ISecurityService.GetLoginByCredentials(login).Result; // sync call
+            //Console.WriteLine($"user.Password: {user.Password}, login.Password: {login.Password}");
             var isValid = _IPasswordService.Check(user.Password, login.Password); // comprobar el password almacenado vs el ingresado
             return (user != null && isValid, user);
         }

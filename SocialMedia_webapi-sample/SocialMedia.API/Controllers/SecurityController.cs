@@ -1,9 +1,7 @@
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Core.Dtos;
-//using SocialMedia.Core.Enumerations;
 using SocialMedia.Infraestructure.Interfaces;
-//using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;

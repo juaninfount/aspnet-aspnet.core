@@ -154,7 +154,7 @@ namespace SocialMedia.Infraestructure.Repositories
 
                 using(var connection = _IDapperContext.CreateConnection())
                 {
-                    id = await connection.QuerySingleAsync<int>(str.ToString());                    
+                    id = await connection.ExecuteScalarAsync<int>(str.ToString(), param: security);                    
                 }
                 return id;
             }
