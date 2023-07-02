@@ -4,8 +4,28 @@
   "description": "aspnetcore_webapi_and_react",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "author": "juaninfount",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "add": "^2.0.6",
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^10.0.1",
+    "bootstrap": "^5.2.2",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "^5.0.1",
+    "reactstrap": "^9.1.5"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "keywords": []
 }
